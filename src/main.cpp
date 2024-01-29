@@ -94,6 +94,8 @@ void onDown(enumKeyCodes key)
         enumKeyCodes::CONTROLLER_Right,
     };
 
+    #ifndef GEODE_IS_ANDROID
+
     if (!PlayLayer::get()->m_player1->m_isPlatformer)
     {
         leftKeys.push_back(enumKeyCodes::KEY_W);
@@ -102,6 +104,8 @@ void onDown(enumKeyCodes key)
         leftKeys.push_back(enumKeyCodes::KEY_D);
         leftKeys.push_back(enumKeyCodes::KEY_Right);
     }
+
+    #endif
 
     bool left = false;
     bool right = false;
