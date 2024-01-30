@@ -80,15 +80,12 @@ void onDown(enumKeyCodes key)
         return;
 
     std::vector<enumKeyCodes> leftKeys = {
-        enumKeyCodes::KEY_Z,
         enumKeyCodes::KEY_Subtract,
         enumKeyCodes::KEY_OEMComma,
         enumKeyCodes::CONTROLLER_Left,
     };
 
     std::vector<enumKeyCodes> rightKeys = {
-        enumKeyCodes::KEY_X,
-        enumKeyCodes::KEY_C,
         enumKeyCodes::KEY_Add,
         enumKeyCodes::KEY_OEMPeriod,
         enumKeyCodes::CONTROLLER_Right,
@@ -101,8 +98,15 @@ void onDown(enumKeyCodes key)
         leftKeys.push_back(enumKeyCodes::KEY_W);
         leftKeys.push_back(enumKeyCodes::KEY_Left);
 
-        leftKeys.push_back(enumKeyCodes::KEY_D);
-        leftKeys.push_back(enumKeyCodes::KEY_Right);
+        rightKeys.push_back(enumKeyCodes::KEY_D);
+        rightKeys.push_back(enumKeyCodes::KEY_Right);
+    }
+
+    if (!PlayLayer::get()->m_isPracticeMode)
+    {
+        leftKeys.push_back(enumKeyCodes::KEY_Z);
+
+        rightKeys.push_back(enumKeyCodes::KEY_X);
     }
 
     #endif
