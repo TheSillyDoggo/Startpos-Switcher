@@ -95,10 +95,10 @@ void onDown(enumKeyCodes key)
 
     if (!PlayLayer::get()->m_player1->m_isPlatformer)
     {
-        leftKeys.push_back(enumKeyCodes::KEY_W);
+        //leftKeys.push_back(enumKeyCodes::KEY_W);
         leftKeys.push_back(enumKeyCodes::KEY_Left);
 
-        rightKeys.push_back(enumKeyCodes::KEY_D);
+        //rightKeys.push_back(enumKeyCodes::KEY_D);
         rightKeys.push_back(enumKeyCodes::KEY_Right);
     }
 
