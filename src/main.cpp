@@ -193,13 +193,11 @@ class $modify (UILayer)
         if (!typeinfo_cast<PlayLayer*>(idk))
             return true;
 
-        if (!Mod::get()->getSettingValue<bool>("show-ui"))
-            return true;
-
         menu = CCMenu::create();
         menu->setPosition(ccp(CCDirector::get()->getWinSize().width / 2, 25));
         menu->setContentSize(ccp(0, 0));
         menu->setScale(0.6f);
+        menu->setVisible(Mod::get()->getSettingValue<bool>("show-ui"));
 
         label = CCLabelBMFont::create("0/0", "bigFont.fnt");
         label->setPosition(ccp(0, 0));
