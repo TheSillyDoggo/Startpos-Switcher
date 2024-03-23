@@ -3,7 +3,7 @@
 	"version": "v1.1.1",
 	"gd": {
 		"win": "2.204",
-		"android": "*"
+		"android": "2.205"
 	},
 	"id": "TheSillyDoggo.StartposSwitcher",
 	"name": "Startpos Switcher",
