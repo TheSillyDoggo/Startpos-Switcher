@@ -7,6 +7,9 @@
 
 using namespace geode::prelude;
 
+#define MEMBERBYOFFSET(type, class, offset) *reinterpret_cast<type*>(reinterpret_cast<uintptr_t>(class) + offset)
+#define MBO MEMBERBYOFFSET
+
 std::vector<StartPosObject*> startPos = {};
 int selectedStartpos = 0;
 
@@ -44,8 +47,12 @@ void switchToStartpos(int incBy, bool actuallySwitch = true)
         int offset = 0x38c0 / 4;
         #endif
 
-        int* startPosCheckpoint = (int*)GameManager::get()->getPlayLayer() + offset;//2949
-        *startPosCheckpoint = 0;
+        //#ifdef GEODE_IS_ANDROID64
+        auto startPosCheckpoint = MBO(StartPosObject*, PlayLayer::get(), 0x38c0);
+        //#else
+        //int* startPosCheckpoint = (int*)GameManager::get()->getPlayLayer() + offset;//2949
+        //#endif
+        startPosCheckpoint = nullptr;
 
         if (!startPosObject && selectedStartpos != -1)
             return;
