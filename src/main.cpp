@@ -41,7 +41,7 @@ void switchToStartpos(int incBy, bool actuallySwitch = true)
         #endif
 
         #ifdef GEODE_IS_ANDROID64
-        int offset = 0x38c0 - 0x16;
+        int offset = 0x38c0 - 0x10;
         #endif
 
         int* startPosCheckpoint = (int*)GameManager::get()->getPlayLayer() + offset;//2949
