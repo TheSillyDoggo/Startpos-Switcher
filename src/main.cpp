@@ -7,9 +7,6 @@
 
 using namespace geode::prelude;
 
-#define MEMBERBYOFFSET(type, class, offset) *reinterpret_cast<type*>(reinterpret_cast<uintptr_t>(class) + offset)
-#define MBO MEMBERBYOFFSET
-
 std::vector<StartPosObject*> startPos = {};
 int selectedStartpos = 0;
 
@@ -17,6 +14,13 @@ bool a = false;
 
 CCLabelBMFont* label;
 CCMenu* menu;
+
+$execute
+{
+    #ifdef GEODE_IS_ANDROID64
+    Mod::get()->patch(reinterpret_cast<void *>(geode::base::get() + 0x82803c), {0x0b, 0x00, 0x00, 0x14});
+    #endif
+}
 
 void switchToStartpos(int incBy, bool actuallySwitch = true)
 {
@@ -35,6 +39,7 @@ void switchToStartpos(int incBy, bool actuallySwitch = true)
         StartPosObject* startPosObject = selectedStartpos == -1 ? nullptr : startPos[selectedStartpos];
 
         // delete the startposcheckpoint (see playlayer_resetlevel line 148 in ida)
+
         #ifdef GEODE_IS_WINDOWS
         int offset = 0xB85;// 0xA6A;
         #endif
@@ -47,12 +52,12 @@ void switchToStartpos(int incBy, bool actuallySwitch = true)
         int offset = 0x38c0 / 4;
         #endif
 
-        //#ifdef GEODE_IS_ANDROID64
-        auto startPosCheckpoint = MBO(StartPosObject*, PlayLayer::get(), 0x38c0);
-        //#else
-        //int* startPosCheckpoint = (int*)GameManager::get()->getPlayLayer() + offset;//2949
-        //#endif
-        startPosCheckpoint = nullptr;
+        #ifndef GEODE_IS_ANDROID64
+
+        int* startPosCheckpoint = (int*)GameManager::get()->getPlayLayer() + offset;//2949
+        *startPosCheckpoint = 0;
+        
+        #endif
 
         if (!startPosObject && selectedStartpos != -1)
             return;
