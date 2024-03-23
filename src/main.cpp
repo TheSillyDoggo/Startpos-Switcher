@@ -32,12 +32,14 @@ void switchToStartpos(int incBy, bool actuallySwitch = true)
         StartPosObject* startPosObject = selectedStartpos == -1 ? nullptr : startPos[selectedStartpos];
 
         // delete the startposcheckpoint (see playlayer_resetlevel line 148 in ida)
-        #ifdef GEODE_IS_WINDOWS
-        int* startPosCheckpoint = (int*)GameManager::get()->getPlayLayer() + 2949;
-        *startPosCheckpoint = 0;
-        #else
-        GameManager::get()->getPlayLayer()->removeAllCheckpoints();
+        int offset = 0xB85;// 0xA6A;
+
+        #ifdef GEODE_IS_ANDROID32
+        offset = 0xb93;
         #endif
+
+        int* startPosCheckpoint = (int*)GameManager::get()->getPlayLayer() + offset;//2949
+        *startPosCheckpoint = 0;
 
         if (!startPosObject && selectedStartpos != -1)
             return;
