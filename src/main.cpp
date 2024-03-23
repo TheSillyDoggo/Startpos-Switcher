@@ -18,7 +18,8 @@ CCMenu* menu;
 $execute
 {
     #ifdef GEODE_IS_ANDROID64
-    Mod::get()->patch(reinterpret_cast<void *>(geode::base::get() + 0x82803c), {0x0b, 0x00, 0x00, 0x14});
+    //1F2003D5
+    Mod::get()->patch(reinterpret_cast<void *>(geode::base::get() + 0x82803c), {0x1F, 0x20, 0x03, 0xD5});
     #endif
 }
 
