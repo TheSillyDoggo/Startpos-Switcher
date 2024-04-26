@@ -39,10 +39,23 @@ void switchToStartpos(int incBy, bool actuallySwitch = true)
     {
         StartPosObject* startPosObject = selectedStartpos == -1 ? nullptr : startPos[selectedStartpos];
 
+        for (size_t i = 0; i < startPos.size(); i++)
+        {
+            startPos[i]->m_startSettings->m_disableStartPos = startPosObject == startPos[i];
+        }
+
+        PlayLayer::get()->setStartPosObject(startPosObject);
+        GameManager::get()->getPlayLayer()->resetLevel();
+
+        PlayLayer::get()->prepareMusic(false);
+
+        return;/*
+        
+
         // delete the startposcheckpoint (see playlayer_resetlevel line 148 in ida)
 
         #ifdef GEODE_IS_WINDOWS
-        int offset = 0xB85;// 0xA6A;
+        int offset = 0x2e6c;// 0xB85;// 0xA6A;
         #endif
         
         #ifdef GEODE_IS_ANDROID32
@@ -50,24 +63,28 @@ void switchToStartpos(int incBy, bool actuallySwitch = true)
         #endif
 
         #ifdef GEODE_IS_ANDROID64
-        int offset = 0x718;
+        int offset = 0x718 - 0x16;
         #endif
 
+        //;
+        GameManager::get()->getPlayLayer()->startMusic();
+
         //auto* startPosCheckpoint = reinterpret_cast<uintptr_t*>(((uintptr_t)pl) + offset);
-        int* startPosCheckpoint = (int*)GameManager::get()->getPlayLayer() + offset;//2949
+        //int* startPosCheckpoint = (int*)GameManager::get()->getPlayLayer() + offset;//2949
+        auto startPosCheckpoint = (reinterpret_cast<float*>(reinterpret_cast<uintptr_t>(PlayLayer::get()) + offset));
         *startPosCheckpoint = 0;
 
         if (!startPosObject && selectedStartpos != -1)
             return;
 
         //reinterpret_cast<void(__thiscall*)(PlayLayer*, StartPosObject*)>(base::get() + 0x199E90)(GameManager::get()->getPlayLayer(), startPosObject);
-        PlayLayer::get()->setStartPosObject(startPosObject);
+        
 
         GameManager::get()->getPlayLayer()->resetLevel();
 
         // apparently you have to start music manually since gd only does it if you dont have a startpos???? (see
         // playlayer_resetlevel line 272 in ida)
-        GameManager::get()->getPlayLayer()->startMusic();
+        GameManager::get()->getPlayLayer()->startMusic();*/
     }
 
     std::stringstream ss;
@@ -174,7 +191,7 @@ class $modify (CCKeyboardDispatcher)
         if (!CCKeyboardDispatcher::dispatchKeyboardMSG(key, down, idk))     
             return false;
 
-        if (PlayLayer::get() && down)
+        if (PlayLayer::get() && down && !idk)
         {
             onDown(key);
         }
@@ -198,6 +215,25 @@ class $modify(PlayLayer)
             menu->setVisible(false);
 
         return res;
+    }
+
+    void resetLevel()
+    {
+        PlayLayer::resetLevel();
+
+        PlayLayer::get()->prepareMusic(false);
+    }
+
+    virtual void postUpdate(float p0)
+    {
+        PlayLayer::postUpdate(p0);
+        
+        std::stringstream ss;
+        ss << selectedStartpos + 1;
+        ss << "/";
+        ss << startPos.size();
+
+        label->setString(ss.str().c_str());
     }
 };
 
@@ -238,7 +274,7 @@ class $modify (UILayer)
         rightSpr->setPosition(rightBtn->getContentSize() / 2);
         rightBtn->setPosition(ccp(85, 0));
 
-        if (PlatformToolbox::isControllerConnected()) // this shits not working :(
+        if (PlatformToolbox::isControllerConnected())
         {
             auto leftCtrl = CCSprite::createWithSpriteFrameName("controllerBtn_DPad_Left_001.png");
             leftCtrl->setPosition(ccp(0, -15));
@@ -264,10 +300,14 @@ class $modify (StartPosObject)
         if (!StartPosObject::init())
             return false;
 
-        //log::info("startpos");
+        if (auto plr = PlayLayer::get())
+        {
+            startPos.push_back(static_cast<StartPosObject*>(this));
+            selectedStartpos = -1;
+            this->m_startSettings->m_disableStartPos = true;
 
-        startPos.push_back(static_cast<StartPosObject*>(this));
-        selectedStartpos = -1;
+            plr->setStartPosObject(nullptr);
+        }
 
         return true;
     }
