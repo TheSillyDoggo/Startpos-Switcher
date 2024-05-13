@@ -21,8 +21,11 @@ jobs:
         - name: Android64
           os: ubuntu-latest
           target: Android64
-        #- name: macOS
-        #  os: macos-latest
+        - name: iOS
+          os: macos-latest
+          target: iOS
+        - name: macOS
+          os: macos-latest
         
 
     name: ${{ matrix.config.name }}
@@ -32,10 +35,11 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Build the mod
-        uses: geode-sdk/build-geode-mod@main
+        #uses: geode-sdk/build-geode-mod@main
+        uses: RoootTheFox/build-geode-mod@main
         with:
           combine: true
-          sdk: nightly
+          #sdk: nightly
           target: ${{ matrix.config.target }}
       
   package:
@@ -44,7 +48,8 @@ jobs:
     needs: ['build']
 
     steps:
-      - uses: geode-sdk/build-geode-mod@combine
+      #- uses: geode-sdk/build-geode-mod@combine
+      - uses: RoootTheFox/build-geode-mod/combine@main
         id: build
 
       - uses: actions/upload-artifact@v3
