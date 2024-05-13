@@ -1,9 +1,9 @@
 {
-	"geode": "2.0.0-beta.24",
+	"geode": "2.0.0-beta.26",
 	"version": "v1.1.4",
 	"gd": {
 		"win": "2.204",
-		"android": "*",
+		"android": "2.205",
 		"mac": "2.200",
 		"ios": "2.205"
 	},
@@ -12,11 +12,11 @@
 	"developer": "TheSillyDoggo",
 	"description": "absolllute in shambles rn",
 	"settings": {
-        "show-ui": {
-            "name": "Show UI",
-            "description": "Show the UI?",
-            "type": "bool",
-            "default": true
-        }
+		"show-ui": {
+			"name": "Show UI",
+			"description": "Show the UI?",
+			"type": "bool",
+			"default": true
+		}
 	}
 }
