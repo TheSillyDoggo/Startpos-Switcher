@@ -202,6 +202,7 @@ class $modify (CCKeyboardDispatcher)
 
 class $modify(PlayLayer)
 {
+#ifndef GEODE_IS_MACOS // PlayLayer::create isn't called on mac for some reason
     static PlayLayer* create(GJGameLevel* p0, bool p1, bool p2)
     {
         startPos.clear();
@@ -216,6 +217,24 @@ class $modify(PlayLayer)
 
         return res;
     }
+#else
+    bool init(GJGameLevel *p0, bool p1, bool p2)
+    {
+        if (!PlayLayer::init(p0,p1,p2)) return false;
+        switchToStartpos(0, false);
+
+        if (startPos.size() == 0)
+            menu->setVisible(false);
+        
+        return true;
+    }
+    void onQuit()
+    {
+        startPos.clear();
+        selectedStartpos = -1;
+        PlayLayer::onQuit();
+    }
+#endif
 
     void resetLevel()
     {
@@ -295,6 +314,23 @@ class $modify (UILayer)
 
 class $modify (StartPosObject)
 {
+#ifdef GEODE_IS_MACOS
+    static StartPosObject* create()
+    {
+        auto res = StartPosObject::create();
+
+        if (auto plr = PlayLayer::get())
+        {
+            startPos.push_back(static_cast<StartPosObject*>(this));
+            selectedStartpos = -1;
+            this->m_startSettings->m_disableStartPos = true;
+
+            plr->setStartPosObject(nullptr);
+        }
+
+        return res;
+    }
+#else
     virtual bool init()
     {
         if (!StartPosObject::init())
@@ -311,4 +347,5 @@ class $modify (StartPosObject)
 
         return true;
     }
+#endif
 };
