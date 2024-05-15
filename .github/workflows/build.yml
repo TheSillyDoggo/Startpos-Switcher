@@ -21,9 +21,9 @@ jobs:
         - name: Android64
           os: ubuntu-latest
           target: Android64
-        - name: iOS
-          os: macos-latest
-          target: iOS
+        #- name: iOS
+        #  os: macos-latest
+        #  target: iOS
         - name: macOS
           os: macos-latest
         
@@ -38,7 +38,6 @@ jobs:
         #uses: geode-sdk/build-geode-mod@main
         uses: RoootTheFox/build-geode-mod@main
         with:
-          bindings: 'TheSillyDoggo/bindings'
           combine: true
           #sdk: nightly
           target: ${{ matrix.config.target }}
