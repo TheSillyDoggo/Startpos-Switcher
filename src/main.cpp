@@ -313,9 +313,9 @@ class $modify (StartPosObject)
 
         if (auto plr = PlayLayer::get())
         {
-            startPos.push_back(static_cast<StartPosObject*>(this));
+            startPos.push_back(static_cast<StartPosObject*>(res));
             selectedStartpos = -1;
-            this->m_startSettings->m_disableStartPos = true;
+            res->m_startSettings->m_disableStartPos = true;
 
             plr->setStartPosObject(nullptr);
         }
